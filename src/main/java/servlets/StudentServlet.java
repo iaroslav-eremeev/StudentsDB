@@ -19,20 +19,20 @@ import java.sql.SQLException;
 @WebServlet("/students")
 public class StudentServlet extends HttpServlet {
 
+    /**
+     * 3.	Для сущностей Student и Auto реализовать сервлеты, которые задают API для:
+     * •	Добавления. Принимается json объект этой сущности без id
+     * •	Удаления. Принимается id сущности
+     * •	Обновления. Принимается json объект этой сущности
+     * •	Получения данных (по id и для всех). Либо не принимаются параметры, либо принимается id сущности
+     * 	Все методы API должны возвращать json объект ResponseResult
+     */
+
     protected void setUnicode(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
         resp.setCharacterEncoding("utf-8");
         resp.setContentType("text/html;charset=utf-8");
         req.setCharacterEncoding("utf-8");
     }
-
-    /**
-     * 2.	В пакете dto (Data Transfer Object) создать generic класс ResponseResult
-     * с полями: result типа boolean, message типа String, object типа T.
-     * Во всех API производить возврат json данного объекта, не выгружая null поля.
-     * В случае успеха: result true, message null, object – тот объект, который требуется вернуть в конкретном API.
-     * В случае ошибки: result false, message c указанием ошибки, object null
-     */
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);

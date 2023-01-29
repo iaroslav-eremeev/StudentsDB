@@ -11,15 +11,6 @@ public class ResponseResult<T> {
      * В случае успеха: result true, message null, object – тот объект, который требуется вернуть в конкретном API.
      * В случае ошибки: result false, message c указанием ошибки, object null
      */
-
-    /**
-     * 3.	Для сущностей Student и Auto реализовать сервлеты, которые задают API для:
-     * •	Добавления. Принимается json объект этой сущности без id
-     * •	Удаления. Принимается id сущности
-     * •	Обновления. Принимается json объект этой сущности
-     * •	Получения данных (по id и для всех). Либо не принимаются параметры, либо принимается id сущности
-     * 	Все методы API должны возвращать json объект ResponseResult
-     */
     private boolean result;
     private String message;
     private T object;
