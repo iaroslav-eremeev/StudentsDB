@@ -25,7 +25,6 @@ public class StudentRepository implements AutoCloseable {
             preparedStatement.setInt(2, student.getAge());
             preparedStatement.setInt(3, student.getNum());
             preparedStatement.setDouble(4, student.getSalary());
-
             int row = preparedStatement.executeUpdate();
             if (row <= 0)
                 return false;

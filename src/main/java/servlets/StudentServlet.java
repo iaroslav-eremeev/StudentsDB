@@ -63,7 +63,6 @@ public class StudentServlet extends HttpServlet {
             resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
         }
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
@@ -100,7 +99,6 @@ public class StudentServlet extends HttpServlet {
             }
         }
     }
-
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
@@ -127,20 +125,21 @@ public class StudentServlet extends HttpServlet {
             resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
         }
     }
-
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        String id = req.getParameter("id");
         String fio = req.getParameter("fio");
         String age = req.getParameter("age");
         String num = req.getParameter("num");
         String salary = req.getParameter("salary");
-        if(fio != null && age != null && num != null && salary != null) {
+        if(id != null & fio != null && age != null && num != null && salary != null) {
             try {
                 StudentRepository studentRepository = new StudentRepository();
-                Student newStudent = new Student(fio, Integer.parseInt(age), Integer.parseInt(num), Double.parseDouble(salary));
+                Student newStudent = new Student(Integer.parseInt(id), fio, Integer.parseInt(age),
+                        Integer.parseInt(num), Double.parseDouble(salary));
                 studentRepository.update(newStudent);
                 ResponseResult<Student> responseResult = new ResponseResult<>(true, null, newStudent);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
