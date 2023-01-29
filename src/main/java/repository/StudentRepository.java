@@ -34,9 +34,7 @@ public class StudentRepository implements AutoCloseable {
                     student.setId(generatedKeys.getInt(1));
             }
             return true;
-        } catch (SQLException ignored) {
-            //ignored.printStackTrace();
-        }
+        } catch (SQLException ignored) {}
         return false;
     }
 
@@ -55,8 +53,7 @@ public class StudentRepository implements AutoCloseable {
 
                 students.add(student);
             }
-        } catch (SQLException e) {
-        }
+        } catch (SQLException ignored) {}
         return students;
     }
 
@@ -75,8 +72,7 @@ public class StudentRepository implements AutoCloseable {
             trainer.setNum(resultSet.getInt(4));
             trainer.setSalary(resultSet.getInt(5));
             return trainer;
-        } catch (SQLException e) {
-        }
+        } catch (SQLException ignored) {}
         return null;
     }
 
@@ -85,8 +81,7 @@ public class StudentRepository implements AutoCloseable {
         try (PreparedStatement preparedStatement = this.conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, student.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException ignored) {
-        }
+        } catch (SQLException ignored) {}
         return false;
     }
 
@@ -99,8 +94,7 @@ public class StudentRepository implements AutoCloseable {
             preparedStatement.setDouble(4, student.getSalary());
             preparedStatement.setInt(5, student.getId());
             return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException ignored) {
-        }
+        } catch (SQLException ignored) {}
         return false;
     }
 
