@@ -147,7 +147,7 @@ public class AutoServlet extends HttpServlet {
             }
         } catch (Exception e) {
             resp.getWriter()
-                    .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage());));
+                    .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
         }
     }
     @Override

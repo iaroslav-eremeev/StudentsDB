@@ -36,22 +36,22 @@ public class StudentServlet extends HttpServlet {
                 try {
                     Student student = studentRepository.getById(Integer.parseInt(id));
                     if (student == null) throw new NoSuchObjectException("There is no student with such id!");
-                    ResponseResult<Student> responseResult = new ResponseResult<>(true, null, student);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(student)));
                 }
                 catch (RuntimeException | NoSuchObjectException e) {
-                    ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
                     resp.setStatus(400);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
                 }
             }
             else {
                 resp.getWriter().println(studentRepository.getStudents());
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
+        } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+            resp.getWriter()
+                    .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
         }
     }
     @Override
@@ -67,16 +67,16 @@ public class StudentServlet extends HttpServlet {
                 StudentRepository studentRepository = new StudentRepository();
                 Student student = new Student(fio, Integer.parseInt(age), Integer.parseInt(num), Double.parseDouble(salary));
                 if (studentRepository.add(student)) {
-                    ResponseResult<Student> responseResult = new ResponseResult<>(true, null, student);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(student)));
                 }
                 else {
                     throw new RuntimeException("Student not added");
                 }
             } catch (Exception e) {
                 resp.setStatus(400);
-                ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                resp.getWriter()
+                        .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
             }
         }
         else{
@@ -84,12 +84,12 @@ public class StudentServlet extends HttpServlet {
                 Student student = objectMapper.readValue(reader, Student.class);
                 StudentRepository studentRepository = new StudentRepository();
                 studentRepository.add(student);
-                ResponseResult<Student> responseResult = new ResponseResult<>(true, null, student);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                resp.getWriter()
+                        .println(objectMapper.writeValueAsString(new ResponseResult<>(student)));
             } catch (Exception e) {
                 resp.setStatus(400);
-                ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                resp.getWriter()
+                        .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
             }
         }
     }
@@ -105,17 +105,16 @@ public class StudentServlet extends HttpServlet {
                     Student studentToDelete = studentRepository.getById(Integer.parseInt(id));
                     if (studentToDelete == null) throw new NoSuchObjectException("No student with such id!");
                     studentRepository.delete(studentToDelete);
-                    ResponseResult<Student> responseResult = new ResponseResult<>(true, null, studentToDelete);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(studentToDelete)));
                 } catch (RuntimeException | NoSuchObjectException e) {
                     resp.setStatus(400);
-                    ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
                 }
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-            resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+        } catch (Exception e) {
+            resp.getWriter().println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
         }
     }
     @Override
@@ -133,12 +132,12 @@ public class StudentServlet extends HttpServlet {
                 Student newStudent = new Student(Integer.parseInt(id), fio, Integer.parseInt(age),
                         Integer.parseInt(num), Double.parseDouble(salary));
                 studentRepository.update(newStudent);
-                ResponseResult<Student> responseResult = new ResponseResult<>(true, null, newStudent);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                resp.getWriter()
+                        .println(objectMapper.writeValueAsString(new ResponseResult<>(newStudent)));
             } catch (Exception e) {
                 resp.setStatus(400);
-                ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                resp.getWriter()
+                        .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
             }
         }
     }
