@@ -2,6 +2,7 @@ package servlets;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import dto.ResponseResult;
 import model.Student;
 import repository.StudentRepository;
@@ -19,15 +20,6 @@ import java.sql.SQLException;
 @WebServlet("/students")
 public class StudentServlet extends HttpServlet {
 
-    /**
-     * 3.	Для сущностей Student и Auto реализовать сервлеты, которые задают API для:
-     * •	Добавления. Принимается json объект этой сущности без id
-     * •	Удаления. Принимается id сущности
-     * •	Обновления. Принимается json объект этой сущности
-     * •	Получения данных (по id и для всех). Либо не принимаются параметры, либо принимается id сущности
-     * 	Все методы API должны возвращать json объект ResponseResult
-     */
-
     protected void setUnicode(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
         resp.setCharacterEncoding("utf-8");
         resp.setContentType("text/html;charset=utf-8");
@@ -37,7 +29,6 @@ public class StudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String id = req.getParameter("id");
         try {
             StudentRepository studentRepository = new StudentRepository();
@@ -67,7 +58,6 @@ public class StudentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String fio = req.getParameter("fio");
         String age = req.getParameter("age");
         String num = req.getParameter("num");
@@ -76,10 +66,14 @@ public class StudentServlet extends HttpServlet {
             try {
                 StudentRepository studentRepository = new StudentRepository();
                 Student student = new Student(fio, Integer.parseInt(age), Integer.parseInt(num), Double.parseDouble(salary));
-                studentRepository.add(student);
-                ResponseResult<Student> responseResult = new ResponseResult<>(true, null, student);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
-            } catch (SQLException | ClassNotFoundException | RuntimeException e) {
+                if (studentRepository.add(student)) {
+                    ResponseResult<Student> responseResult = new ResponseResult<>(true, null, student);
+                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                }
+                else {
+                    throw new RuntimeException("Student not added");
+                }
+            } catch (Exception e) {
                 resp.setStatus(400);
                 ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
@@ -92,7 +86,7 @@ public class StudentServlet extends HttpServlet {
                 studentRepository.add(student);
                 ResponseResult<Student> responseResult = new ResponseResult<>(true, null, student);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
-            } catch (SQLException | ClassNotFoundException | RuntimeException e) {
+            } catch (Exception e) {
                 resp.setStatus(400);
                 ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
@@ -103,7 +97,6 @@ public class StudentServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String id = req.getParameter("id");
         try {
             StudentRepository studentRepository = new StudentRepository();
@@ -129,7 +122,6 @@ public class StudentServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String id = req.getParameter("id");
         String fio = req.getParameter("fio");
         String age = req.getParameter("age");
@@ -143,7 +135,7 @@ public class StudentServlet extends HttpServlet {
                 studentRepository.update(newStudent);
                 ResponseResult<Student> responseResult = new ResponseResult<>(true, null, newStudent);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
-            } catch (SQLException | ClassNotFoundException | NumberFormatException e) {
+            } catch (Exception e) {
                 resp.setStatus(400);
                 ResponseResult<Student> responseResult = new ResponseResult<>(false, e.getMessage(), null);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));

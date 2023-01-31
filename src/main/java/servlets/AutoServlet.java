@@ -2,6 +2,7 @@ package servlets;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import dto.ResponseResult;
 import model.Auto;
 import model.Student;
@@ -39,7 +40,6 @@ public class AutoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String id = req.getParameter("id");
         try {
             AutoRepository autoRepository = new AutoRepository();
@@ -69,7 +69,6 @@ public class AutoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String brand = req.getParameter("brand");
         String power = req.getParameter("power");
         String year = req.getParameter("year");
@@ -87,7 +86,7 @@ public class AutoServlet extends HttpServlet {
                     ResponseResult<Auto> responseResult = new ResponseResult<>(true, null, auto);
                     resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
                 } else throw new NoSuchObjectException("There is no student with such id!");
-            } catch (SQLException | ClassNotFoundException | RuntimeException | NoSuchObjectException e) {
+            } catch (Exception e) {
                 resp.setStatus(400);
                 ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
@@ -105,7 +104,7 @@ public class AutoServlet extends HttpServlet {
                     ResponseResult<Auto> responseResult = new ResponseResult<>(true, null, auto);
                     resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
                 } else throw new NoSuchObjectException("There is no student with such id!");
-            } catch (SQLException | ClassNotFoundException | RuntimeException | NoSuchObjectException e) {
+            } catch (Exception e) {
                 resp.setStatus(400);
                 ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
@@ -129,7 +128,6 @@ public class AutoServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String id = req.getParameter("id");
         try {
             AutoRepository autoRepository = new AutoRepository();
@@ -155,7 +153,6 @@ public class AutoServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String id = req.getParameter("id");
         String brand = req.getParameter("brand");
         String power = req.getParameter("power");
@@ -173,7 +170,7 @@ public class AutoServlet extends HttpServlet {
                     ResponseResult<Auto> responseResult = new ResponseResult<>(true, null, newAuto);
                     resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
                 } else throw new NoSuchObjectException("There is no student with such id!");
-            } catch (SQLException | ClassNotFoundException | NumberFormatException | NoSuchObjectException e) {
+            } catch (Exception e) {
                 resp.setStatus(400);
                 ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
                 resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
