@@ -10,9 +10,9 @@ public class ResponseResult<T> {
     private String message;
     private T data;
 
-    public ResponseResult(boolean result, String message, T data) {
-        this.result = result;
-        this.message = message;
+    public ResponseResult(T data) {
+        this.result = true;
+        this.message = null;
         this.data = data;
     }
 

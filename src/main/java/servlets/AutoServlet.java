@@ -31,7 +31,8 @@ public class AutoServlet extends HttpServlet {
      * 	Все методы API должны возвращать json объект ResponseResult
      */
 
-    protected void setUnicode(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
+    protected void setUnicode(HttpServletRequest req, HttpServletResponse resp)
+            throws UnsupportedEncodingException {
         resp.setCharacterEncoding("utf-8");
         resp.setContentType("text/html;charset=utf-8");
         req.setCharacterEncoding("utf-8");
@@ -47,22 +48,22 @@ public class AutoServlet extends HttpServlet {
                 try {
                     Auto auto = autoRepository.getById(Integer.parseInt(id));
                     if (auto == null) throw new NoSuchObjectException("There is no auto with such id!");
-                    ResponseResult<Auto> responseResult = new ResponseResult<>(true, null, auto);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
                 }
                 catch (RuntimeException | NoSuchObjectException e) {
-                    ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
                     resp.setStatus(400);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
                 }
             }
             else {
                 resp.getWriter().println(autoRepository.getAuto());
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
+        } catch (Exception e) {
             resp.setStatus(400);
-            resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+            resp.getWriter()
+                    .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
         }
     }
     @Override
@@ -83,13 +84,13 @@ public class AutoServlet extends HttpServlet {
                 if (checkStudent(auto, studentRepository)){
                     // если такой студент есть, добавляем автомобиль в базу
                     autoRepository.add(auto);
-                    ResponseResult<Auto> responseResult = new ResponseResult<>(true, null, auto);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
                 } else throw new NoSuchObjectException("There is no student with such id!");
             } catch (Exception e) {
                 resp.setStatus(400);
-                ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                resp.getWriter()
+                        .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
             }
         }
         else{
@@ -97,17 +98,17 @@ public class AutoServlet extends HttpServlet {
                 Auto auto = objectMapper.readValue(reader, Auto.class);
                 AutoRepository autoRepository = new AutoRepository();
                 StudentRepository studentRepository = new StudentRepository();
-                // проверка наличия студента с указанным idStudent
+                // check if there is a student with such idStudent
                 if (checkStudent(auto, studentRepository)){
-                    // если такой студент есть, добавляем автомобиль в базу
+                    // add auto to repository if there is such student
                     autoRepository.add(auto);
-                    ResponseResult<Auto> responseResult = new ResponseResult<>(true, null, auto);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
                 } else throw new NoSuchObjectException("There is no student with such id!");
             } catch (Exception e) {
                 resp.setStatus(400);
-                ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                resp.getWriter()
+                        .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
             }
         }
     }
@@ -136,17 +137,17 @@ public class AutoServlet extends HttpServlet {
                     Auto autoToDelete = autoRepository.getById(Integer.parseInt(id));
                     if (autoToDelete == null) throw new NoSuchObjectException("No auto with such id!");
                     autoRepository.delete(autoToDelete);
-                    ResponseResult<Auto> responseResult = new ResponseResult<>(true, null, autoToDelete);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(autoToDelete)));
                 } catch (RuntimeException | NoSuchObjectException e) {
                     resp.setStatus(400);
-                    ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
                 }
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-            resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+        } catch (Exception e) {
+            resp.getWriter()
+                    .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage());));
         }
     }
     @Override
@@ -167,13 +168,13 @@ public class AutoServlet extends HttpServlet {
                 // проверка наличия студента с указанным idStudent
                 if (checkStudent(newAuto, studentRepository)){
                     autoRepository.update(newAuto);
-                    ResponseResult<Auto> responseResult = new ResponseResult<>(true, null, newAuto);
-                    resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(newAuto)));
                 } else throw new NoSuchObjectException("There is no student with such id!");
             } catch (Exception e) {
                 resp.setStatus(400);
-                ResponseResult<Auto> responseResult = new ResponseResult<>(false, e.getMessage(), null);
-                resp.getWriter().println(objectMapper.writeValueAsString(responseResult));
+                resp.getWriter()
+                        .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
             }
         }
     }
