@@ -6,14 +6,6 @@ import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseResult<T> {
-
-    /**
-     * 2.	В пакете dto (Data Transfer Object) создать generic класс ResponseResult
-     * с полями: result типа boolean, message типа String, object типа T.
-     * Во всех API производить возврат json данного объекта, не выгружая null поля.
-     * В случае успеха: result true, message null, object – тот объект, который требуется вернуть в конкретном API.
-     * В случае ошибки: result false, message c указанием ошибки, object null
-     */
     private boolean result;
     private String message;
     private T object;
