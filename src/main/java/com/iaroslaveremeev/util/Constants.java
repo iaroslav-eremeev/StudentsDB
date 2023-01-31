@@ -1,4 +1,4 @@
-package util;
+package com.iaroslaveremeev.util;
 
 public class Constants {
     public static final String DB_URL = "jdbc:mysql://localhost:3306/students";

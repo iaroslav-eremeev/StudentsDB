@@ -1,4 +1,4 @@
-package model;
+package com.iaroslaveremeev.model;
 
 import java.util.Objects;
 

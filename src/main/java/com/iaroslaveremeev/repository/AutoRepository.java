@@ -1,7 +1,7 @@
-package repository;
+package com.iaroslaveremeev.repository;
 
-import model.Auto;
-import util.Constants;
+import com.iaroslaveremeev.model.Auto;
+import com.iaroslaveremeev.util.Constants;
 
 import java.sql.*;
 import java.util.ArrayList;

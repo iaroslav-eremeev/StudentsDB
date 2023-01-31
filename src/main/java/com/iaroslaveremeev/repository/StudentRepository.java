@@ -1,8 +1,8 @@
-package repository;
+package com.iaroslaveremeev.repository;
 
 
-import model.Student;
-import util.Constants;
+import com.iaroslaveremeev.model.Student;
+import com.iaroslaveremeev.util.Constants;
 
 import java.sql.*;
 import java.util.ArrayList;

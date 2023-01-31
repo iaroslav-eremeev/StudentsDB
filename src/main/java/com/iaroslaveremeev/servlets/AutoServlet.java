@@ -1,13 +1,10 @@
-package servlets;
+package com.iaroslaveremeev.servlets;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import dto.ResponseResult;
-import model.Auto;
-import model.Student;
-import repository.AutoRepository;
-import repository.StudentRepository;
+import com.iaroslaveremeev.repository.AutoRepository;
+import com.iaroslaveremeev.repository.StudentRepository;
+import com.iaroslaveremeev.dto.ResponseResult;
+import com.iaroslaveremeev.model.Auto;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.rmi.NoSuchObjectException;
-import java.sql.SQLException;
 
 @WebServlet("/auto")
 public class AutoServlet extends HttpServlet {
