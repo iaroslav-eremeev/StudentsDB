@@ -23,6 +23,9 @@ public class ResponseResult<T> {
         this.data = null;
     }
 
+    public ResponseResult() {
+    }
+
     public boolean isResult() {
         return result;
     }

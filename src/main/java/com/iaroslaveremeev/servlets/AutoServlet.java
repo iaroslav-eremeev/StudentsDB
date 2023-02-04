@@ -18,15 +18,6 @@ import java.rmi.NoSuchObjectException;
 @WebServlet("/auto")
 public class AutoServlet extends HttpServlet {
 
-    /**
-     * 3.	Для сущностей Student и Auto реализовать сервлеты, которые задают API для:
-     * •	Добавления. Принимается json объект этой сущности без id
-     * •	Удаления. Принимается id сущности
-     * •	Обновления. Принимается json объект этой сущности
-     * •	Получения данных (по id и для всех). Либо не принимаются параметры, либо принимается id сущности
-     * 	Все методы API должны возвращать json объект ResponseResult
-     */
-
     protected void setUnicode(HttpServletRequest req, HttpServletResponse resp)
             throws UnsupportedEncodingException {
         resp.setCharacterEncoding("utf-8");
@@ -54,7 +45,7 @@ public class AutoServlet extends HttpServlet {
                 }
             }
             else {
-                resp.getWriter().println(autoRepository.getAuto());
+                resp.getWriter().println(objectMapper.writeValueAsString(new ResponseResult<>(autoRepository.getAuto())));
             }
         } catch (Exception e) {
             resp.setStatus(400);

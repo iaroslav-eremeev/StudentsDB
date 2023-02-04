@@ -43,7 +43,7 @@ public class StudentServlet extends HttpServlet {
                 }
             }
             else {
-                resp.getWriter().println(studentRepository.getStudents());
+                resp.getWriter().println(objectMapper.writeValueAsString(new ResponseResult<>(studentRepository.getStudents())));
             }
         } catch (Exception e) {
             resp.setStatus(400);
