@@ -29,12 +29,26 @@ public class AutoServlet extends HttpServlet {
         setUnicode(req, resp);
         ObjectMapper objectMapper = new ObjectMapper();
         String id = req.getParameter("id");
+        String idStudent = req.getParameter("id_s");
         try {
             AutoRepository autoRepository = new AutoRepository();
             if (id != null){
                 try {
                     Auto auto = autoRepository.getById(Integer.parseInt(id));
                     if (auto == null) throw new NoSuchObjectException("There is no auto with such id!");
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
+                }
+                catch (RuntimeException | NoSuchObjectException e) {
+                    resp.setStatus(400);
+                    resp.getWriter()
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(e.getMessage())));
+                }
+            }
+            else if (idStudent != null){
+                try {
+                    Auto auto = autoRepository.getByStudentId(Integer.parseInt(idStudent));
+                    if (auto == null) throw new NoSuchObjectException("There is no auto with such student id!");
                     resp.getWriter()
                             .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
                 }
