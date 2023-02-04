@@ -12,7 +12,6 @@ public class AutoRepository implements AutoCloseable {
 
     public AutoRepository() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        // Получение класса, который мы не создавали - из библиотеки (регистрация класса)
         this.conn = DriverManager.getConnection(Constants.DB_URL,
                 Constants.USERNAME, Constants.PASSWORD);
     }
@@ -80,21 +79,22 @@ public class AutoRepository implements AutoCloseable {
         return null;
     }
 
-    public Auto getByStudentId(int idStudent) {
+    public List<Auto> getByStudentId(int idStudent) {
         String sql = "select * from auto where auto.id_s=?";
+        ArrayList<Auto> studentAutos = new ArrayList<>();
         try (PreparedStatement preparedStatement = this.conn.prepareStatement(sql)) {
             preparedStatement.setInt(1, idStudent);
-
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next())
-                return null;
-            Auto autoByStudentId = new Auto();
-            autoByStudentId.setId(resultSet.getInt(1));
-            autoByStudentId.setBrand(resultSet.getString(2));
-            autoByStudentId.setPower(resultSet.getInt(3));
-            autoByStudentId.setYear(resultSet.getInt(4));
-            autoByStudentId.setIdStudent(resultSet.getInt(5));
-            return autoByStudentId;
+            while (resultSet.next()){
+                Auto autoByStudentId = new Auto();
+                autoByStudentId.setId(resultSet.getInt(1));
+                autoByStudentId.setBrand(resultSet.getString(2));
+                autoByStudentId.setPower(resultSet.getInt(3));
+                autoByStudentId.setYear(resultSet.getInt(4));
+                autoByStudentId.setIdStudent(resultSet.getInt(5));
+                studentAutos.add(autoByStudentId);
+            }
+            return studentAutos;
         } catch (SQLException e) {
         }
         return null;

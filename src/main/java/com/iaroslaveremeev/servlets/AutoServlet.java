@@ -14,6 +14,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/auto")
 public class AutoServlet extends HttpServlet {
@@ -47,10 +49,10 @@ public class AutoServlet extends HttpServlet {
             }
             else if (idStudent != null){
                 try {
-                    Auto auto = autoRepository.getByStudentId(Integer.parseInt(idStudent));
-                    if (auto == null) throw new NoSuchObjectException("There is no auto with such student id!");
+                    List<Auto> studentAutos = autoRepository.getByStudentId(Integer.parseInt(idStudent));
+                    if (studentAutos == null) throw new NoSuchObjectException("There is no auto with such student id!");
                     resp.getWriter()
-                            .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(studentAutos)));
                 }
                 catch (RuntimeException | NoSuchObjectException e) {
                     resp.setStatus(400);
