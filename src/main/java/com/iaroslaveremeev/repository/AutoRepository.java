@@ -80,6 +80,26 @@ public class AutoRepository implements AutoCloseable {
         return null;
     }
 
+    public Auto getByStudentId(int idStudent) {
+        String sql = "select * from auto where auto.id_s=?";
+        try (PreparedStatement preparedStatement = this.conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idStudent);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next())
+                return null;
+            Auto autoByStudentId = new Auto();
+            autoByStudentId.setId(resultSet.getInt(1));
+            autoByStudentId.setBrand(resultSet.getString(2));
+            autoByStudentId.setPower(resultSet.getInt(3));
+            autoByStudentId.setYear(resultSet.getInt(4));
+            autoByStudentId.setIdStudent(resultSet.getInt(5));
+            return autoByStudentId;
+        } catch (SQLException e) {
+        }
+        return null;
+    }
+
     public boolean delete(Auto auto) {
         String sql = "delete from auto where auto.id=?";
         try (PreparedStatement preparedStatement = this.conn.prepareStatement(sql)) {
