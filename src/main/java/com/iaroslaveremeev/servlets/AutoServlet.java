@@ -76,7 +76,7 @@ public class AutoServlet extends HttpServlet {
         String brand = req.getParameter("brand");
         String power = req.getParameter("power");
         String year = req.getParameter("year");
-        String idStudent = req.getParameter("idStudent");
+        String idStudent = req.getParameter("id_s");
         if(brand != null && power != null && year != null & idStudent != null) {
             try {
                 AutoRepository autoRepository = new AutoRepository();
@@ -161,7 +161,7 @@ public class AutoServlet extends HttpServlet {
         String brand = req.getParameter("brand");
         String power = req.getParameter("power");
         String year = req.getParameter("year");
-        String idStudent = req.getParameter("idStudent");
+        String idStudent = req.getParameter("id_s");
         if(brand != null && power != null && year != null & idStudent != null) {
             try {
                 AutoRepository autoRepository = new AutoRepository();
