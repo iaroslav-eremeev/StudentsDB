@@ -35,9 +35,7 @@ public class StudentRepository implements AutoCloseable {
                     student.setId(generatedKeys.getInt(1));
             }
             return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (SQLException ignored) {}
         return false;
     }
 
