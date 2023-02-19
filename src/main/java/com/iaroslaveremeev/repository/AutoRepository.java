@@ -10,10 +10,12 @@ public class AutoRepository implements AutoCloseable {
 
     private Connection conn;
 
-    public AutoRepository() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        this.conn = DriverManager.getConnection(Constants.DB_URL,
-                Constants.USERNAME, Constants.PASSWORD);
+    public AutoRepository() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            this.conn = DriverManager.getConnection(Constants.DB_URL,
+                    Constants.USERNAME, Constants.PASSWORD);
+        } catch (ClassNotFoundException | SQLException ignored) {}
     }
 
     public boolean add(Auto auto) {

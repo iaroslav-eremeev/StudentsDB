@@ -11,10 +11,12 @@ import java.util.List;
 public class StudentRepository implements AutoCloseable {
     private Connection conn;
 
-    public StudentRepository() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        this.conn = DriverManager.getConnection(Constants.DB_URL,
-                Constants.USERNAME, Constants.PASSWORD);
+    public StudentRepository() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            this.conn = DriverManager.getConnection(Constants.DB_URL,
+                    Constants.USERNAME, Constants.PASSWORD);
+        } catch (ClassNotFoundException | SQLException ignored) {}
     }
 
     public boolean add(Student student) {
