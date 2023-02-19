@@ -1,10 +1,10 @@
 package com.iaroslaveremeev.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iaroslaveremeev.repository.AutoRepository;
+import com.iaroslaveremeev.model.Car;
+import com.iaroslaveremeev.repository.CarRepository;
 import com.iaroslaveremeev.repository.StudentRepository;
 import com.iaroslaveremeev.dto.ResponseResult;
-import com.iaroslaveremeev.model.Auto;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,11 +14,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.rmi.NoSuchObjectException;
-import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/auto")
-public class AutoServlet extends HttpServlet {
+@WebServlet("/cars")
+public class CarServlet extends HttpServlet {
 
     protected void setUnicode(HttpServletRequest req, HttpServletResponse resp)
             throws UnsupportedEncodingException {
@@ -33,13 +32,13 @@ public class AutoServlet extends HttpServlet {
         String id = req.getParameter("id");
         String idStudent = req.getParameter("id_s");
         try {
-            AutoRepository autoRepository = new AutoRepository();
+            CarRepository carRepository = new CarRepository();
             if (id != null){
                 try {
-                    Auto auto = autoRepository.getById(Integer.parseInt(id));
-                    if (auto == null) throw new NoSuchObjectException("There is no auto with such id!");
+                    Car car = carRepository.getById(Integer.parseInt(id));
+                    if (car == null) throw new NoSuchObjectException("There is no car with such id!");
                     resp.getWriter()
-                            .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(car)));
                 }
                 catch (RuntimeException | NoSuchObjectException e) {
                     resp.setStatus(400);
@@ -49,10 +48,10 @@ public class AutoServlet extends HttpServlet {
             }
             else if (idStudent != null){
                 try {
-                    List<Auto> studentAutos = autoRepository.getByStudentId(Integer.parseInt(idStudent));
-                    if (studentAutos == null) throw new NoSuchObjectException("There is no auto with such student id!");
+                    List<Car> studentCars = carRepository.getByStudentId(Integer.parseInt(idStudent));
+                    if (studentCars == null) throw new NoSuchObjectException("There is no car with such student id!");
                     resp.getWriter()
-                            .println(objectMapper.writeValueAsString(new ResponseResult<>(studentAutos)));
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(studentCars)));
                 }
                 catch (RuntimeException | NoSuchObjectException e) {
                     resp.setStatus(400);
@@ -61,7 +60,7 @@ public class AutoServlet extends HttpServlet {
                 }
             }
             else {
-                resp.getWriter().println(objectMapper.writeValueAsString(new ResponseResult<>(autoRepository.getAuto())));
+                resp.getWriter().println(objectMapper.writeValueAsString(new ResponseResult<>(carRepository.getAuto())));
             }
         } catch (Exception e) {
             resp.setStatus(400);
@@ -79,16 +78,16 @@ public class AutoServlet extends HttpServlet {
         String idStudent = req.getParameter("id_s");
         if(brand != null && power != null && year != null & idStudent != null) {
             try {
-                AutoRepository autoRepository = new AutoRepository();
+                CarRepository carRepository = new CarRepository();
                 StudentRepository studentRepository = new StudentRepository();
-                Auto auto = new Auto(brand, Integer.parseInt(power),
+                Car car = new Car(brand, Integer.parseInt(power),
                         Integer.parseInt(year), Integer.parseInt(idStudent));
                 // проверка наличия студента с указанным idStudent
-                if (checkStudent(auto, studentRepository)){
+                if (checkStudent(car, studentRepository)){
                     // если такой студент есть, добавляем автомобиль в базу
-                    autoRepository.add(auto);
+                    carRepository.add(car);
                     resp.getWriter()
-                            .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(car)));
                 } else throw new NoSuchObjectException("There is no student with such id!");
             } catch (Exception e) {
                 resp.setStatus(400);
@@ -98,15 +97,15 @@ public class AutoServlet extends HttpServlet {
         }
         else{
             try (BufferedReader reader = req.getReader()) {
-                Auto auto = objectMapper.readValue(reader, Auto.class);
-                AutoRepository autoRepository = new AutoRepository();
+                Car car = objectMapper.readValue(reader, Car.class);
+                CarRepository carRepository = new CarRepository();
                 StudentRepository studentRepository = new StudentRepository();
                 // check if there is a student with such idStudent
-                if (checkStudent(auto, studentRepository)){
-                    // add auto to repository if there is such student
-                    autoRepository.add(auto);
+                if (checkStudent(car, studentRepository)){
+                    // add car to repository if there is such student
+                    carRepository.add(car);
                     resp.getWriter()
-                            .println(objectMapper.writeValueAsString(new ResponseResult<>(auto)));
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(car)));
                 } else throw new NoSuchObjectException("There is no student with such id!");
             } catch (Exception e) {
                 resp.setStatus(400);
@@ -116,10 +115,10 @@ public class AutoServlet extends HttpServlet {
         }
     }
 
-    private boolean checkStudent(Auto auto, StudentRepository studentRepository) {
+    private boolean checkStudent(Car car, StudentRepository studentRepository) {
         boolean studentFound = false;
         for (int i = 0; i < studentRepository.getStudents().size(); i++) {
-            if (auto.getIdStudent() == studentRepository.getStudents().get(i).getId()){
+            if (car.getIdStudent() == studentRepository.getStudents().get(i).getId()){
                 studentFound = true;
                 break;
             }
@@ -134,14 +133,14 @@ public class AutoServlet extends HttpServlet {
         ObjectMapper objectMapper = new ObjectMapper();
         String id = req.getParameter("id");
         try {
-            AutoRepository autoRepository = new AutoRepository();
+            CarRepository carRepository = new CarRepository();
             if(id != null){
                 try {
-                    Auto autoToDelete = autoRepository.getById(Integer.parseInt(id));
-                    if (autoToDelete == null) throw new NoSuchObjectException("No auto with such id!");
-                    autoRepository.delete(autoToDelete);
+                    Car carToDelete = carRepository.getById(Integer.parseInt(id));
+                    if (carToDelete == null) throw new NoSuchObjectException("No car with such id!");
+                    carRepository.delete(carToDelete);
                     resp.getWriter()
-                            .println(objectMapper.writeValueAsString(new ResponseResult<>(autoToDelete)));
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(carToDelete)));
                 } catch (RuntimeException | NoSuchObjectException e) {
                     resp.setStatus(400);
                     resp.getWriter()
@@ -164,15 +163,15 @@ public class AutoServlet extends HttpServlet {
         String idStudent = req.getParameter("id_s");
         if(brand != null && power != null && year != null & idStudent != null) {
             try {
-                AutoRepository autoRepository = new AutoRepository();
+                CarRepository carRepository = new CarRepository();
                 StudentRepository studentRepository = new StudentRepository();
-                Auto newAuto = new Auto(Integer.parseInt(id), brand, Integer.parseInt(power),
+                Car newCar = new Car(Integer.parseInt(id), brand, Integer.parseInt(power),
                         Integer.parseInt(year), Integer.parseInt(idStudent));
                 // проверка наличия студента с указанным idStudent
-                if (checkStudent(newAuto, studentRepository)){
-                    autoRepository.update(newAuto);
+                if (checkStudent(newCar, studentRepository)){
+                    carRepository.update(newCar);
                     resp.getWriter()
-                            .println(objectMapper.writeValueAsString(new ResponseResult<>(newAuto)));
+                            .println(objectMapper.writeValueAsString(new ResponseResult<>(newCar)));
                 } else throw new NoSuchObjectException("There is no student with such id!");
             } catch (Exception e) {
                 resp.setStatus(400);

@@ -2,7 +2,7 @@ package com.iaroslaveremeev.model;
 
 import java.util.Objects;
 
-public class Auto {
+public class Car {
 
     private int id;
     private String brand;
@@ -10,10 +10,10 @@ public class Auto {
     private int year;
     private int idStudent;
 
-    public Auto() {
+    public Car() {
     }
 
-    public Auto(int id, String brand, int power, int year, int idStudent) {
+    public Car(int id, String brand, int power, int year, int idStudent) {
         this.id = id;
         this.brand = brand;
         this.power = power;
@@ -21,7 +21,7 @@ public class Auto {
         this.idStudent = idStudent;
     }
 
-    public Auto(String brand, int power, int year, int idStudent) {
+    public Car(String brand, int power, int year, int idStudent) {
         this.brand = brand;
         this.power = power;
         this.year = year;
@@ -72,8 +72,8 @@ public class Auto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Auto auto = (Auto) o;
-        return id == auto.id && power == auto.power && year == auto.year && idStudent == auto.idStudent && Objects.equals(brand, auto.brand);
+        Car car = (Car) o;
+        return id == car.id && power == car.power && year == car.year && idStudent == car.idStudent && Objects.equals(brand, car.brand);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class Auto {
 
     @Override
     public String toString() {
-        return "Auto{" +
+        return "Car{" +
                 "id=" + id +
                 ", brand='" + brand + '\'' +
                 ", power=" + power +

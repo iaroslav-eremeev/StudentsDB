@@ -22,7 +22,7 @@ select *
 from students
 where salary > 1400;
 
-create table auto
+create table car
 (
     id    integer primary key auto_increment,
     brand varchar(10) not null,
@@ -33,18 +33,18 @@ create table auto
         on delete cascade on update cascade
 );
 
-insert into auto(brand, power, year, id_s)
+insert into car(brand, power, year, id_s)
 VALUES ('Vaz', 140, 1988, 1);
-insert into auto(brand, power, year, id_s)
+insert into car(brand, power, year, id_s)
 VALUES ('Vaz', 120, 1992, 1);
-insert into auto(brand, power, year, id_s)
+insert into car(brand, power, year, id_s)
 VALUES ('Vaz', 130, 1990, 2);
-insert into auto(brand, power, year, id_s)
+insert into car(brand, power, year, id_s)
 VALUES ('audi', 150, 1995, 2);
-insert into auto(brand, power, year, id_s)
+insert into car(brand, power, year, id_s)
 VALUES ('kia', 145, 2004, 3);
 
-select * from auto;
+select * from car;
 
 
 
